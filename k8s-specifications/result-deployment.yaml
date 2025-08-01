@@ -14,9 +14,11 @@ spec:
       labels:
         app: result
     spec:
+      imagePullSecrets:
+      - name: docker-auth
       containers:
-      - image: dockersamples/examplevotingapp_result
+      - image: docker.io/minsiktruong/votingapp-result:latest
         name: result
         ports:
-        - containerPort: 80
+        - containerPort: 8081
           name: result

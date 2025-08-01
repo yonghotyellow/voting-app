@@ -14,6 +14,8 @@ spec:
       labels:
         app: worker
     spec:
+      imagePullSecrets:
+      - name: docker-auth
       containers:
-      - image: dockersamples/examplevotingapp_worker
+      - image: docker.io/minsiktruong/votingapp-worker:latest
         name: worker
