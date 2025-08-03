@@ -62,4 +62,4 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Delete
   hostPath:
-    path: /home/hieu/example-voting-app/data
+    path: /home/student/voting-app/data
