@@ -22,8 +22,8 @@ spec:
         name: worker
         resources:
           requests:
-            cpu: 10m
-            memory: 30Mi
+            cpu: 100m
+            memory: 100Mi
           limits:
             cpu: 100m
             memory: 100Mi
@@ -68,7 +68,7 @@ spec:
       controlledResources: ["cpu", "memory"]
       minAllowed:
         cpu: 10m
-        memory: 30Mi
+        memory: 100Mi
       maxAllowed:
         cpu: 300m
         memory: 300Mi 
