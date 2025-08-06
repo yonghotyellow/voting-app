@@ -5,7 +5,7 @@ metadata:
     app: vote
   name: vote
 spec:
-  replicas: 3
+ 
   selector:
     matchLabels:
       app: vote
@@ -20,6 +20,34 @@ spec:
       - image: docker.io/minsiktruong/votingapp-vote:latest
         imagePullPolicy: Always
         name: vote
+        resources:
+          requests:
+            cpu: 150m
+            memory: 150Mi
+          limits:
+            cpu: 150m
+            memory: 150Mi
         ports:
         - containerPort: 8080
           name: vote
+
+---
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: vote-hpa
+spec: 
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: vote
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: AverageValue
+          averageValue: 100Mi
