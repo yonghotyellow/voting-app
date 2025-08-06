@@ -5,6 +5,7 @@ metadata:
     app: worker
   name: worker
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: worker
@@ -29,21 +30,45 @@ spec:
 
 ---
 
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
+#apiVersion: autoscaling/v2
+#kind: HorizontalPodAutoscaler
+#metadata:
+#  name: worker-hpa
+#spec:
+#  scaleTargetRef:
+#    apiVersion: apps/v1
+#    kind: Deployment
+#    name: worker
+#  minReplicas: 2
+#  maxReplicas: 5
+#  metrics:
+#  - type: Resource
+#    resource:
+#      name: cpu
+#      target:
+#        type: AverageValue
+#        averageValue: 80m
+#
+#---
+
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
 metadata:
-  name: worker-hpa
-spec:
-  scaleTargetRef:
+  name: worker-vpa
+spec: 
+  targetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: worker
-  minReplicas: 2
-  maxReplicas: 5
-  metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: AverageValue
-        averageValue: 80m
+  updatePolicy:
+    updateMode: "Auto"
+  resourcePolicy:
+    containerPolicies:
+    - containerName: "*"
+      controlledResources: ["cpu", "memory"]
+      minAllowed:
+        cpu: 10m
+        memory: 30Mi
+      maxAllowed:
+        cpu: 300m
+        memory: 300Mi 
