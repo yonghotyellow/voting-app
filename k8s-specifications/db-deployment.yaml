@@ -6,7 +6,7 @@ metadata:
     app: db
 spec:
   serviceName: "db"  # Must be defined even if not exposed
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: db

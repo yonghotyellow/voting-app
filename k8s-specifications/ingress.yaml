@@ -1,31 +1,22 @@
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: vote
-  name: vote
-spec:
-  type: ClusterIP
-  ports:
-  - name: "vote-service"
-    port: 8080
-    targetPort: 8080
-    #nodePort: 31000
-  selector:
-    app: vote
- 
----
-
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: vote-ingress
-spec: 
-  ingressClassName: nginx 
+  annotations:
+    #nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
   rules:
   - host: vote.example.com
     http:
       paths:
+      - path: /result
+        pathType: Prefix
+        backend:
+          service:
+            name: result
+            port:
+              name: "result-service"
       - path: /
         pathType: Prefix
         backend:
@@ -33,3 +24,4 @@ spec:
             name: vote
             port:
               name: "vote-service"
+
