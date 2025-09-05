@@ -1,27 +1,43 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: vote-ingress
+  name: postgres-ingress
   annotations:
     #nginx.ingress.kubernetes.io/rewrite-target: /
+    #nginx.ingress.kubernetes.io/backend-protocol: "TCP"
 spec:
   ingressClassName: nginx
   rules:
-  - host: vote.example.com
+  - host: postgres.example.com
     http:
       paths:
-      - path: /result
-        pathType: Prefix
-        backend:
-          service:
-            name: result
-            port:
-              name: "result-service"
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: vote
-            port:
-              name: "vote-service"
+            name: postgres-svc
+            port:  
+              name: postgres
 
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  annotations:
+    #nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx 
+  rules:
+  - host: nginx.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-svc
+            port:
+              #name: http
+              number: 80
